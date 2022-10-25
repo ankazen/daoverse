@@ -1,0 +1,7 @@
+HOST: 127.0.0.1
+PORT: 9000
+NAME: deoverse
+DEBUG: True
+DB_PATH: daoverse.db
+TEMPLATE_PATH: strdata/templates
+STATIC_PATH: static
