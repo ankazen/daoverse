@@ -7,6 +7,7 @@
     <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
     <script src="https://cdn.ethers.io/lib/ethers-5.2.umd.min.js" type="application/javascript"></script>
+    
     <title></title>
     <style type="text/css">
     html,
@@ -26,7 +27,9 @@
             <div x-show="address" class="text-center text-sm truncate w-36 m-auto flex">
                 <span x-text="address" class="p-1 w-36 truncate text-black text-sm"></span>
                 <button @click="copy">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+                    </svg>
                 </button>
             </div>
         </div>
@@ -36,9 +39,92 @@
         </div>
     </div>
     <script type="text/javascript">
+    var exampleSource = "pragma solidity ^0.4.2;\n\ncontract mortal {\n    /* Define variable owner of the type address*/\n    address owner;\n\n    /* this function is executed at initialization and sets the owner of the contract */\n    function mortal() { owner = msg.sender; }\n\n    /* Function to recover the funds on the contract */\n    // function kill() { if (msg.sender == owner) selfdestruct(owner); }\n}\n\ncontract greeter is mortal {\n    /* define variable greeting of the type string */\n    string greeting;\n\n    /* this runs when the contract is executed */\n    function greeter(string _greeting) public {\n        greeting = _greeting;\n    }\n\n    /* main function */\n    function greet() constant returns (string) {\n        return greeting;\n    }\n}";
+    var optimize = 1;
+    var compiler;
+
+    function getSourceCode() {
+        return document.getElementById("source").value;
+    }
+
+    function getVersion() {
+        return
+        return document.getElementById("versions").value;
+    }
+
+    function status(txt) {
+        // document.getElementById("status").innerHTML = txt;
+    }
+
+    function populateVersions(versions) {
+        // sel = document.getElementById("versions");
+        // sel.innerHTML = "";
+
+        for (var i = 0; i < versions.length; i++) {
+            var opt = document.createElement('option');
+            opt.appendChild(document.createTextNode(versions[i]));
+            opt.value = versions[i];
+            // sel.appendChild(opt);
+        }
+    }
+
+    function solcCompile(compiler) {
+        status("compiling");
+        // document.getElementById("compile-output").value = "";
+        var result = compiler.compile(getSourceCode(), optimize);
+        var stringResult = JSON.stringify(result);
+        // document.getElementById("compile-output").value = stringResult;
+        // status("Compile Complete.");
+    }
+
+    function loadSolcVersion() {
+        // status("Loading Solc: " + getVersion());
+        BrowserSolc.loadVersion(getVersion(), function(c) {
+            compiler = c;
+            console.log("Solc Version Loaded: " + getVersion());
+            // status("Solc loaded.  Compiling...");
+            solcCompile(compiler);
+        });
+    }
+
+    window.onload = function() {
+        console.log('onload')
+        // document.getElementById("source").value = exampleSource;
+
+        // document.getElementById("versions").onchange = loadSolcVersion;
+
+        if (typeof BrowserSolc == 'undefined') {
+            console.log("You have to load browser-solc.js in the page.  We recommend using a <script> tag.");
+            throw new Error();
+        }
+
+        status("Loading Compiler");
+        BrowserSolc.getVersions(function(soljsonSources, soljsonReleases) {
+            console.log(soljsonSources, soljsonReleases)
+            populateVersions(soljsonSources);
+
+            // document.getElementById("versions").value = soljsonReleases["0.4.5"];
+
+            loadSolcVersion();
+        });
+    };
+
     const HOST = 'http://127.0.0.1:9000'
     console.log(window.ethereum)
     const provider = new ethers.providers.Web3Provider(window.ethereum)
+    console.log(window)
+    BrowserSolc.getVersions(function(soljsonSources, soljsonReleases) {
+        console.log(soljsonSources);
+        console.log(soljsonReleases);
+    })
+
+    //Load a specific compiler version
+    BrowserSolc.loadVersion("soljson-v0.4.6+commit.2dabbdf0.js", function(compiler) {
+        source = 'contract x { function g() {} }';
+        optimize = 1;
+        result = compiler.compile(source, optimize);
+        console.log(result);
+    })
 
     function indexPage() {
         return {
@@ -46,14 +132,14 @@
             address: '',
             signer: null,
             async init() {
-                
+
             },
             async collectWallet() {
                 await provider.send("eth_requestAccounts", []);
                 this.signer = provider.getSigner();
                 console.log(this.signer);
                 this.address = await this.signer.getAddress()
-                fetch(HOST + '/api/union?address='+ this.address)
+                fetch(HOST + '/api/union?address=' + this.address)
                     .then(response => response.json())
                     .then(data => {
                         // console.log(data)

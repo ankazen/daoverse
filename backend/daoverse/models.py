@@ -17,87 +17,45 @@ class Union(BaseModel):
         return dic
 
 
-class User(BaseModel):
-    address = CharField(unique = True)
-    name = CharField()
-
-    class Meta:
-        table_name = 'daoverse_user'
-
-    def m2d(self):
-        dic = model_to_dict(self, backrefs=False, recurse=False)
-        return dic
-
-
-class UnionUser(BaseModel):
-    user = ForeignKeyField(User)
+class UnionMember(BaseModel):
+    address = CharField()
     union = ForeignKeyField(Union)
+    is_admin = BooleanField(default=False)
 
     class Meta:
-        table_name = 'daoverse_union_user'
+        table_name = 'daoverse_union_member'
 
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
         return dic
 
 
-class State(BaseModel):
-    type = CharField()
+class Contract(BaseModel):
     name = CharField()
+    union = ForeignKeyField(Union)
+    creator = CharField()
 
     class Meta:
-        table_name = 'daoverse_state'
+        table_name = 'daoverse_contract'
 
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
         return dic
-
-
-class Tran(BaseModel):
-    state = ForeignKeyField(State)
-    name = CharField()
-
-    class Meta:
-        table_name = 'daoverse_tran'
-
-    def m2d(self):
-        dic = model_to_dict(self, backrefs=False, recurse=False)
-        return dic
-
-
-class Order(BaseModel):
-    creator = ForeignKeyField(User)
-    type = CharField() # apply invite
-    state = ForeignKeyField(State)
-
-    class Meta:
-        table_name = 'daoverse_order'
-
-    def m2d(self):
-        dic = model_to_dict(self, backrefs=False, recurse=False)
-        return dic
-
-
-class TranLog(BaseModel):
-    order = ForeignKeyField(Order)
-    user = ForeignKeyField(User)
-    tran = ForeignKeyField(Tran)
-
-    class Meta:
-        table_name = 'daoverse_tranlog'
-
-    def m2d(self):
-        dic = model_to_dict(self, backrefs=False, recurse=False)
 
 
 class Apply(BaseModel):
-    order = ForeignKeyField(Order)
+    address = CharField()
+    union = ForeignKeyField(Union)
+    desc = CharField()
+    certified = BooleanField(default=False)
+    certified_at = DateTimeField(null=True)
+
     class Meta:
         table_name = 'daoverse_apply'
 
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
+        return dic
 
 
-
-DB.create_tables([Union, User, UnionUser, State, Tran, Order, TranLog, Apply])
+DB.create_tables([Union, UnionMember, Contract, Apply])
