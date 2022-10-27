@@ -8,6 +8,7 @@
         </div>
         <div class="flex-grow flex flex-row">
             <div class="w-60 bg-green-200">
+                <div class="w-full" @click="this.$router.push({name:'applys'})">Apply</div>
                 <div><button @click="this.$router.push({name:'contracts'})">+</button></div>
                 <div v-for="contract in contracts">{{contract.name}}</div>
             </div>
@@ -17,12 +18,10 @@
 </template>
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
 
 export default {
     name: 'HomeView',
     components: {
-        HelloWorld
     },
     data() {
         return {

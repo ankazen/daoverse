@@ -7,7 +7,6 @@ import operator
 
 
 def need_auth(request):
-    print(request.ctx)
     user = request.ctx.user
     if not user:
         raise exceptions.Forbidden(f'需要登录')
@@ -123,7 +122,7 @@ def createRoutes(data):
     
     if 'create' in data:
         def create(request):
-            request.ctx.json = eval(request.json) if request.json else {}
+            request.ctx.json = request.json
             
             cfg = data['create']
             if 'auth' in cfg and cfg['auth']:
@@ -141,7 +140,7 @@ def createRoutes(data):
     
     if 'patch' in data:
         def patch(request, pk):
-            request.ctx.json = eval(request.json) if request.json else {}
+            request.ctx.json = request.json
 
             cfg = data['patch']
             if 'auth' in cfg and cfg['auth']:
@@ -157,7 +156,7 @@ def createRoutes(data):
                 row = cfg['db_done'](request, row)
 
             return json_ok(row.m2d())
-        result.append({'handler': patch, 'path': '/'+name +'/<pk>', 'method': 'patch', 'params':'pk', 'name':name + '_patch_'})
+        result.append({'handler': patch, 'path': '/'+name +'/<pk>', 'method': 'patch', 'params':'pk', 'name':name + '_patch'})
 
     return result
 
@@ -187,7 +186,7 @@ def createApis(bp, BaseUrl, tplname):
         url =  '+'.join(urls)
         routes_list.append({'name':name, 'method': method, 'url': url, 'params': param})
     
-    tpl='restful/templates/{}.tpl'.format(tplname)
+    tpl='strdata/templates/{}.tpl'.format(tplname)
     jinja2_template_string = open(tpl, 'r').read()
     template = Template(jinja2_template_string)
     content = template.render({'BaseUrl': BaseUrl, 'routes':routes_list })

@@ -69,7 +69,27 @@ const routes = [
     component: function () {
       return import(/* webpackChunkName: "about" */ '../views/ContractView.vue')
     }
-  }
+  },
+  {
+    path: '/apply',
+    name: 'applys',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/ApplyList.vue')
+    }
+  },
+  {
+    path: '/union/:unionname/contract/:contractname',
+    name: 'union_contract',
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: function () {
+      return import(/* webpackChunkName: "about" */ '../views/UnionContractView.vue')
+    }
+  },
 ]
 
 const router = createRouter({

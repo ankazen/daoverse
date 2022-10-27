@@ -6,7 +6,7 @@
 </template>
 
 <script type="text/javascript">
-  import {userdata} from '../global'
+  import {userdata, emitter} from '../global'
   import { ethers } from "ethers";
 
   export default {
@@ -17,6 +17,7 @@
             this.signer = provider.getSigner();
             console.log(this.signer);
             userdata.address = await this.signer.getAddress()
+            emitter.emit('signer', {page: this, data:userdata.address});
             this.$router.push({name:'home'})
         }
     }

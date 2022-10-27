@@ -8,22 +8,32 @@ from playhouse.signals import post_save
 
 class Union(BaseModel):
     name = CharField(unique=True) 
+    
+    class Meta:
+        table_name = 'union'
+
+    def m2d(self):
+        dic = model_to_dict(self, backrefs=False, recurse=False)
+        return dic
+
+class User(BaseModel):
+    identifier = CharField()
 
     class Meta:
-        table_name = 'daoverse_union'
+        table_name = 'user'
 
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
         return dic
 
 
-class UnionMember(BaseModel):
-    address = CharField()
+class UnionUser(BaseModel):
+    user = ForeignKeyField(User)
     union = ForeignKeyField(Union)
     is_admin = BooleanField(default=False)
 
     class Meta:
-        table_name = 'daoverse_union_member'
+        table_name = 'union_user'
 
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
@@ -33,10 +43,23 @@ class UnionMember(BaseModel):
 class Contract(BaseModel):
     name = CharField()
     union = ForeignKeyField(Union)
-    creator = CharField()
+    creator = ForeignKeyField(User)
 
     class Meta:
-        table_name = 'daoverse_contract'
+        table_name = 'contract'
+
+    def m2d(self):
+        dic = model_to_dict(self, backrefs=False, recurse=False)
+        return dic
+
+
+class UnionContract(BaseModel):
+    user = ForeignKeyField(User)
+    union = ForeignKeyField(Union)
+    contract = ForeignKeyField(Contract)
+
+    class Meta:
+        table_name = 'union_contract'
 
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
@@ -44,18 +67,19 @@ class Contract(BaseModel):
 
 
 class Apply(BaseModel):
-    address = CharField()
+    user = ForeignKeyField(User)
     union = ForeignKeyField(Union)
     desc = CharField()
     certified = BooleanField(default=False)
     certified_at = DateTimeField(null=True)
+    certified_user = ForeignKeyField(User, null=True)
 
     class Meta:
-        table_name = 'daoverse_apply'
+        table_name = 'apply'
 
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
         return dic
 
 
-DB.create_tables([Union, UnionMember, Contract, Apply])
+DB.create_tables([Union, User, UnionUser, Contract, Apply, UnionContract])

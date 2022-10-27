@@ -5,3 +5,4 @@ DEBUG: True
 DB_PATH: daoverse.db
 TEMPLATE_PATH: strdata/templates
 STATIC_PATH: static
+API_BASEURL: http://127.0.0.1:9000

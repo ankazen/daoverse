@@ -1,5 +1,4 @@
 <template>
-  <div class="about">
-    <h1>This is an union page</h1>
+  <div class="flex flex-row">
   </div>
 </template>

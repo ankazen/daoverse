@@ -15,12 +15,16 @@
             
         </div>
     </div> -->
-</template>
+    <div class="bg-black w-full h-full fixed z-50 top-0 left-0" v-show="dailog">
+          3333
+    </div>
+</template> 
 <script type="text/javascript">
 export default {
     data() {
         return {
             items: [{ name: 'A', link: '/union/A' }],
+            dailog: false,
         }
     },
     // `mounted` 是生命周期钩子，之后我们会讲到
