@@ -7,22 +7,24 @@
 const hre = require("hardhat");
 
 async function main() {
-  const governorToken = await hre.ethers.getContractFactory("VotingGovernor");
+  const governorToken = await hre.ethers.getContractFactory("GovernanceToken");
   const token = await governorToken.deploy();
 
   await token.deployed();
 
   // console.log(token)
-  for (let key in token){
-    console.log(key)
-  }
-
-  let t = await token._afterTokenTransfer()
-  console.log(t)
+  // let t = await token._afterTokenTransfer()
+  // console.log(t)
 
   console.log(
     `governorToken deployed to ${token.address}`
   );
+
+
+  const GovernorContract = await hre.ethers.getContractFactory("GovernorContract");
+  const contract = await GovernorContract.deploy(token.address, 100, 1, 1, 1);
+
+  await contract.deployed();
 }
 
 // We recommend this pattern to be able to use async/await everywhere
