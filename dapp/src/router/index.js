@@ -31,17 +31,7 @@ const routes = [
     }
   },
   {
-    path: '/unions/',
-    name: 'unions',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/UnionList.vue')
-    }
-  },
-  {
-    path: '/union/:name',
+    path: '/union/:union_id',
     name: 'union',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
@@ -51,43 +41,23 @@ const routes = [
     }
   },
   {
-    path: '/contracts/',
-    name: 'contracts',
+    path: '/union/:union_id/apply',
+    name: 'union_apply',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/ContractList.vue')
+      return import(/* webpackChunkName: "about" */ '../views/UnionApplyList.vue')
     }
   },
   {
-    path: '/contract/:name',
-    name: 'contract',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/ContractView.vue')
-    }
-  },
-  {
-    path: '/apply',
-    name: 'applys',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/ApplyList.vue')
-    }
-  },
-  {
-    path: '/union/:unionname/contract/:contractname',
+    path: '/union/:union_id/contract',
     name: 'union_contract',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: function () {
-      return import(/* webpackChunkName: "about" */ '../views/UnionContractView.vue')
+      return import(/* webpackChunkName: "about" */ '../views/UnionContractList.vue')
     }
   },
 ]

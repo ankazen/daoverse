@@ -14,4 +14,23 @@ emitter.on('signer', data=>{
 })
 
 
+emitter.on('Complie', data=>{
+    let compiler = data.compiler
+    let contract = data.contract
+
+    let source = 'contract x { function g() {} }';
+    let optimize = 1;
+    let result = compiler.compile(source, optimize);
+    console.log(result);
+
+    emitter.emit('ComplieDone', result)
+
+    // BrowserSolc.loadVersion(this.version, function(compiler) {
+    //             this.state = 'Compiling'
+    //             console.log(this.contract)
+                
+    //         });
+})
+
+
 createApp(App).use(router).mount('#app')

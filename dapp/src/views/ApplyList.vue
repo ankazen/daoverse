@@ -9,6 +9,7 @@
 <script type="text/javascript">
 import { apply_find, apply_patch } from '../daoverse_apis'
 export default {
+    props: ['union'],
     data() {
         return {
             applys: []

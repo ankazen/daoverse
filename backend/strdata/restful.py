@@ -148,10 +148,11 @@ def createRoutes(data):
             if 'request_done' in cfg:
                 cfg['request_done'](request, pk)
             
-            q = model.update(request.ctx.json).where(id==pk)
-            q.execute()
-
             row = model.get(id=pk)
+            for item in request.ctx.json:
+                setattr(row, item, request.ctx.json[item])
+                
+            row.save()
             if 'db_done' in cfg:
                 row = cfg['db_done'](request, row)
 

@@ -4,7 +4,7 @@ import json
 from sanic import Blueprint
 from playhouse.shortcuts import dict_to_model
 from strdata.sanic_utils import json_ok, json_fail
-from daoverse.models import Union, UnionUser, Contract, Apply, User
+from daoverse.models import Union, UnionUser, Contract, UnionApply, User, UnionContract
 from strdata.restful import attachRoutes
 from sanic.exceptions import SanicException
 import datetime
@@ -39,18 +39,25 @@ async def auth(request):
     return json_ok(dic)
 
 
+def union_mine(request, qs):
+    tp = request.args.get('type')
+    if tp == 'mine':
+        qs = qs.where(UnionUser.user==request.ctx.user)
+
+    return qs
+
+
 def fill_user(request):
     request.ctx.json['user'] = request.ctx.user
 
 
 def apply_patch_check(request, pk):
-    row = Apply.get(id=pk)
+    row = UnionApply.get(id=pk)
     union = row.union
     user = request.ctx.user
     qs = UnionUser.select().where(UnionUser.union==union, UnionUser.is_admin==True)
     if qs.count() == 0:
         raise SanicException("权限不足", status_code=501)
-
     request.ctx.json['certified_at'] = datetime.datetime.now()
     request.ctx.json['certified_user'] = user
 
@@ -87,7 +94,8 @@ routes_config = [
         '_name': 'unionuser',
         '_model': UnionUser,
         'find': {
-            'auth': False,
+            'auth': True,
+            'db_done': union_mine
         },
         'findOne': {
             'auth': False,
@@ -110,8 +118,8 @@ routes_config = [
         },
     },
     {
-        '_name': 'apply',
-        '_model': Apply,
+        '_name': 'unionapply',
+        '_model': UnionApply,
         'find': {
             'auth': False,
         },
@@ -126,6 +134,19 @@ routes_config = [
             'auth': True,
             'request_done': apply_patch_check
         }
+    },
+    {
+        '_name': 'unoincontract',
+        '_model': UnionContract,
+        'find': {
+            'auth': False,
+        },
+        'findOne': {
+            'auth': False,
+        },
+        'create': {
+            'auth': False,
+        },
     },
 ]
 
