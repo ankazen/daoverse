@@ -15,12 +15,27 @@ emitter.on('signer', data=>{
 
 
 emitter.on('Complie', data=>{
+    console.log('Complie', data)
     let compiler = data.compiler
     let contract = data.contract
 
-    let source = 'contract x { function g() {} }';
+    let sources = {}
+    let source = ' '
+    for (let f in data.contract.files) {
+        let content = data.contract.files[f].content
+        if (content.indexOf('contract') === -1) {
+            continue
+        }
+        sources[f] = {content:data.contract.files[f].content};
+        source = data.contract.files[f].content
+    }
+
+    let input = {
+        language: 'Solidity',
+        sources: sources
+    }
     let optimize = 1;
-    let result = compiler.compile(source, optimize);
+    let result = compiler.compile(JSON.string, optimize);
     console.log(result);
 
     emitter.emit('ComplieDone', result)
@@ -31,6 +46,7 @@ emitter.on('Complie', data=>{
                 
     //         });
 })
+
 
 
 createApp(App).use(router).mount('#app')

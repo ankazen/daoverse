@@ -8,6 +8,7 @@ from pathlib import Path
 
 
 ContractPath = './contracts'
+AbiPath = './abis'
 
 
 class Union(BaseModel):
@@ -74,6 +75,7 @@ class UnionContract(BaseModel):
     address = CharField()
     abi = CharField()
     name = CharField()
+    network = CharField()
 
     class Meta:
         table_name = 'union_contract'
@@ -81,6 +83,10 @@ class UnionContract(BaseModel):
     def m2d(self):
         dic = model_to_dict(self, backrefs=False, recurse=False)
         dic['contract'] = self.contract.m2d()
+
+        path = Path(self.abi)
+        print(path)
+        dic['interface'] = path.read_text()
         return dic
 
 

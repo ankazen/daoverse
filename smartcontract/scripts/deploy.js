@@ -7,19 +7,21 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
-  const unlockTime = currentTimestampInSeconds + ONE_YEAR_IN_SECS;
+  const governorToken = await hre.ethers.getContractFactory("VotingGovernor");
+  const token = await governorToken.deploy();
 
-  const lockedAmount = hre.ethers.utils.parseEther("1");
+  await token.deployed();
 
-  const Lock = await hre.ethers.getContractFactory("Lock");
-  const lock = await Lock.deploy(unlockTime, { value: lockedAmount });
+  // console.log(token)
+  for (let key in token){
+    console.log(key)
+  }
 
-  await lock.deployed();
+  let t = await token._afterTokenTransfer()
+  console.log(t)
 
   console.log(
-    `Lock with 1 ETH and unlock timestamp ${unlockTime} deployed to ${lock.address}`
+    `governorToken deployed to ${token.address}`
   );
 }
 

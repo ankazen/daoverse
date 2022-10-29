@@ -46,83 +46,8 @@ function request(url, method, args, data) {
 
 
 
-export function user_findOne(pk, args, data) {
-    return request("/api/user/"+pk, 'get', args, data)
-}
-
-
-export function unionapply_find(args, data) {
-    return request("/api/unionapply", 'get', args, data)
-}
-
-
-export function user_create(args, data) {
-    return request("/api/user", 'post', args, data)
-}
-
-
-export function union_create(args, data) {
-    return request("/api/union", 'post', args, data)
-}
-
-
-export function auth(args, data) {
-    return request("/api/auth", 'post', args, data)
-}
-
-
-export function union_findOne(pk, args, data) {
-    return request("/api/union/"+pk, 'get', args, data)
-}
-
-
-export function unionapply_patch(pk, args, data) {
-    return request("/api/unionapply/"+pk, 'patch', args, data)
-}
-
-
-export function unoincontract_find(args, data) {
-    return request("/api/unoincontract", 'get', args, data)
-}
-
-
-export function unionuser_find(args, data) {
-    return request("/api/unionuser", 'get', args, data)
-}
-
-
-export function unionapply_findOne(pk, args, data) {
-    return request("/api/unionapply/"+pk, 'get', args, data)
-}
-
-
-export function contract_create(args, data) {
-    return request("/api/contract", 'post', args, data)
-}
-
-
-export function unoincontract_create(args, data) {
-    return request("/api/unoincontract", 'post', args, data)
-}
-
-
-export function contract_findOne(pk, args, data) {
-    return request("/api/contract/"+pk, 'get', args, data)
-}
-
-
 export function unionapply_create(args, data) {
     return request("/api/unionapply", 'post', args, data)
-}
-
-
-export function unionuser_create(args, data) {
-    return request("/api/unionuser", 'post', args, data)
-}
-
-
-export function contract_find(args, data) {
-    return request("/api/contract", 'get', args, data)
 }
 
 
@@ -131,8 +56,13 @@ export function unoincontract_findOne(pk, args, data) {
 }
 
 
-export function unionuser_findOne(pk, args, data) {
-    return request("/api/unionuser/"+pk, 'get', args, data)
+export function auth(args, data) {
+    return request("/api/auth", 'post', args, data)
+}
+
+
+export function unoincontract_find(args, data) {
+    return request("/api/unoincontract", 'get', args, data)
 }
 
 
@@ -141,6 +71,76 @@ export function user_find(args, data) {
 }
 
 
+export function contract_find(args, data) {
+    return request("/api/contract", 'get', args, data)
+}
+
+
+export function contract_findOne(pk, args, data) {
+    return request("/api/contract/"+pk, 'get', args, data)
+}
+
+
 export function union_find(args, data) {
     return request("/api/union", 'get', args, data)
+}
+
+
+export function unionapply_find(args, data) {
+    return request("/api/unionapply", 'get', args, data)
+}
+
+
+export function union_findOne(pk, args, data) {
+    return request("/api/union/"+pk, 'get', args, data)
+}
+
+
+export function contract_create(args, data) {
+    return request("/api/contract", 'post', args, data)
+}
+
+
+export function unionuser_find(args, data) {
+    return request("/api/unionuser", 'get', args, data)
+}
+
+
+export function unoincontract_create(args, data) {
+    return request("/api/unoincontract", 'post', args, data)
+}
+
+
+export function union_create(args, data) {
+    return request("/api/union", 'post', args, data)
+}
+
+
+export function unionuser_create(args, data) {
+    return request("/api/unionuser", 'post', args, data)
+}
+
+
+export function user_create(args, data) {
+    return request("/api/user", 'post', args, data)
+}
+
+
+export function user_findOne(pk, args, data) {
+    return request("/api/user/"+pk, 'get', args, data)
+}
+
+
+export function unionapply_patch(pk, args, data) {
+    return request("/api/unionapply/"+pk, 'patch', args, data)
+}
+
+
+export function unionapply_findOne(pk, args, data) {
+    return request("/api/unionapply/"+pk, 'get', args, data)
+}
+
+
+export function unionuser_findOne(pk, args, data) {
+    return request("/api/unionuser/"+pk, 'get', args, data)
 }
